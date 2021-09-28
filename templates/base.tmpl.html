@@ -1,0 +1,39 @@
+{{define "base"}}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ .Title }} - Portphosis</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛴</text></svg>"
+    />
+
+    <!-- Material UI Icons-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+    <!-- Custom JS & CSS -->
+    <link rel="stylesheet" href="/static/css/index.css">
+    <script src="/static/js/index.js"></script>
+
+  </head>
+  <body>
+    <div id="side-bar" class="side-bar">
+      <span id="side-bar-toggle-icon" class="material-icons icon" onclick="toggleNav()">chevron_left</span>
+    </div>
+    <div class="main-container">
+      <header class="bar">
+        <h1 class="title"><a href="/">PORTPHOSIS</a></h1>
+      </header>
+
+      <div class="main-card">
+        {{template "content" .}}
+      </div>
+    </div>
+  </body>
+</html>
+{{end}}
