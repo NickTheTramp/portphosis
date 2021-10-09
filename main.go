@@ -1,33 +1,26 @@
 package main
 
 import (
-	"html/template"
+	"github.com/gobuffalo/packr/v2"
+	c "github.com/nickthetramp/portphosis/configurationManager"
+	h "github.com/nickthetramp/portphosis/handler"
 	"log"
 	"net/http"
 )
 
-type Page struct {
-	Title string
-	Body  []byte
-}
-
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	p := Page{Title: "Title"}
-	t, _ := template.ParseFiles("templates/index.tmpl.html","templates/base.tmpl.html")
-	t.Execute(w, p)
-}
-
-func otherHandler(w http.ResponseWriter, r *http.Request) {
-	p := Page{Title: "Other"}
-	t, _ := template.ParseFiles("templates/index.tmpl.html","templates/base.tmpl.html")
-	t.Execute(w, p)
-}
-
 
 func main() {
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+	static := packr.New("static","./static")
+	configurations := packr.New("configurations","./configurations")
 
-	http.HandleFunc("/", indexHandler)
-	http.HandleFunc("/other", otherHandler)
+	manager := c.ConfigurationManager{ Box: configurations}
+	handler := h.Handler{
+		Manager: manager,
+	}
+
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(static)))
+	http.HandleFunc("/", handler.IndexHandler)
+	http.HandleFunc("/config", handler.ConfigHandler)
+
 	log.Fatal(http.ListenAndServe(":80", nil))
 }

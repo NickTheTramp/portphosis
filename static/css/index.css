@@ -2,7 +2,7 @@ body{
     margin: 0 0 0 84px;
 }
 
-h1, h2, p, a {
+h1, h2, p, a, span {
     font-family: "Roboto", serif;
     text-decoration: none;
 }
@@ -52,11 +52,37 @@ h1, h2, p, a {
     top: 50%;
     transform: translateY(-50%);
     right: 5px;
+    justify-self: center;
+}
+
+.side-bar-menu-item-container {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 5px;
+    align-items: center;
+    justify-content: center;
+    margin-right: 64px;
+    flex-direction: column;
+}
+
+.side-bar-menu-item {
+    display: flex;
+    flex: 1;
+    width: 200px;
+    max-height: 25px;
+    margin: 15px;
+    padding: 15px;
+    border-radius: 40px;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 6px #000000;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .icon {
     font-size: xx-large;
-    justify-self: center;
 }
 
 .main-container{

@@ -10,6 +10,7 @@
 
     <!-- Material UI Icons-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,6 +25,19 @@
   <body>
     <div id="side-bar" class="side-bar">
       <span id="side-bar-toggle-icon" class="material-icons icon" onclick="toggleNav()">chevron_left</span>
+      <div class="side-bar-menu-item-container">
+        {{range .Configurations}}
+          <a href="/config?name={{.Name}}">
+          <span class="side-bar-menu-item">{{.Name}}
+            {{if .IsRunning}}
+              <span class="material-icons-outlined side-bar-menu-item-icon">check_circle_outline</span>
+            {{else}}
+              <span class="material-icons-outlined side-bar-menu-item-icon">radio_button_unchecked</span>
+            {{end}}
+          </span>
+          </a>
+        {{end}}
+      </div>
     </div>
     <div class="main-container">
       <header class="bar">
