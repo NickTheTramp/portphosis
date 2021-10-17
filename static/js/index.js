@@ -10,3 +10,22 @@ function toggleNav() {
         document.getElementById("side-bar-toggle-icon").style.transform = "rotate(180deg)";
     }
 }
+
+function toggleContainer(configurationName) {
+    let url = '/toggle?name=' + configurationName;
+
+    fetch(url)
+        .then(response => response)
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
+
+let menuItems = document.getElementsByClassName("side-bar-menu-item-icon")
+
+for (let menuItem of menuItems) {
+    menuItem.addEventListener("click", toggleContainer);
+}

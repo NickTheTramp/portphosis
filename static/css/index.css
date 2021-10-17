@@ -5,6 +5,7 @@ body{
 h1, h2, p, a, span {
     font-family: "Roboto", serif;
     text-decoration: none;
+    color: black;
 }
 
 .bar {
@@ -83,6 +84,14 @@ h1, h2, p, a, span {
 
 .icon {
     font-size: xx-large;
+}
+
+.side-bar-menu-footer-icon {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 15px;
+    margin-right: 64px;
 }
 
 .main-container{
