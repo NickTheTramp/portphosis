@@ -6,10 +6,12 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
 	"github.com/gobuffalo/packr/v2"
+	"gopkg.in/yaml.v3"
+	"log"
 	"strings"
 )
 
-var DockerPrefix string = "nickthetramp/"
+var DockerPrefix = "nickthetramp/"
 
 type ConfigurationManager struct {
 	Box    *packr.Box
@@ -21,6 +23,7 @@ type Configuration struct {
 	Name      string
 	IsRunning bool
 	Path      string
+	Ports     []int `yaml:"ports"`
 }
 
 func (cm *ConfigurationManager) GetConfigurations() []Configuration {
@@ -29,6 +32,11 @@ func (cm *ConfigurationManager) GetConfigurations() []Configuration {
 	for _, file := range cm.Box.List() {
 		// The parent folder of the docker-compose.yml is set as the name of the Configuration
 		fileNames := strings.Split(file, "/")
+
+		if len(fileNames) <= 1 {
+			continue
+		}
+
 		if fileNames[1] != "Dockerfile" && fileNames[1] != "docker-compose.yml" {
 			continue
 		}
@@ -36,7 +44,7 @@ func (cm *ConfigurationManager) GetConfigurations() []Configuration {
 		name := strings.ToLower(fileNames[0])
 
 		configuration := Configuration{Name: name, Path: file}
-		configuration.GetStatus(*cm)
+		configuration.Populate(*cm)
 
 		configurations = append(configurations, configuration)
 	}
@@ -52,7 +60,7 @@ func (cm *ConfigurationManager) FindConfiguration(name string) (Configuration, e
 			configuration = cf
 		}
 	}
-	configuration.GetStatus(*cm)
+	configuration.Populate(*cm)
 
 	if &configuration.Path != nil {
 		return configuration, nil
@@ -61,9 +69,20 @@ func (cm *ConfigurationManager) FindConfiguration(name string) (Configuration, e
 	}
 }
 
-func (c *Configuration) GetStatus(cm ConfigurationManager) {
+func (c *Configuration) Populate(cm ConfigurationManager) {
 	ctx := context.Background()
 	containers, _ := cm.Client.ContainerList(ctx, types.ContainerListOptions{})
+
+	// Get Porthosis Configuration File
+	configurationYaml, err := cm.Box.FindString(c.Name + "/porthosis.yml")
+	if err != nil {
+		log.Println("Error while finding file", err.Error())
+	}
+
+	err = yaml.Unmarshal([]byte(configurationYaml), &c)
+	if err != nil {
+		log.Println("Error while unmarshalling", err.Error())
+	}
 
 	for _, v := range containers {
 		// Set default settings

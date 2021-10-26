@@ -15,6 +15,7 @@ require (
 	github.com/docker/distribution v2.7.1+incompatible // indirect
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.4.0 // indirect
+	github.com/go-yaml/yaml v2.1.0+incompatible // indirect
 	github.com/gobuffalo/logger v1.0.4 // indirect
 	github.com/gobuffalo/packd v1.0.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
