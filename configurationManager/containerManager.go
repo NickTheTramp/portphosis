@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/pkg/archive"
 	"github.com/docker/go-connections/nat"
 	"io"
@@ -64,9 +65,20 @@ func (c *Configuration) CreateContainer(cm ConfigurationManager) {
 			},
 		}
 	}
-
 	containerConfig.ExposedPorts = exposedPorts
 	hostConfig.PortBindings = portBindings
+
+	var volumeBindings []mount.Mount
+	pwd, err := os.Getwd()
+
+	for _, volume := range c.Volumes {
+		volumeBindings = append(volumeBindings, mount.Mount{
+			Target: volume.Target,
+			Source: pwd + volume.Source,
+			Type:   "bind",
+		})
+	}
+	hostConfig.Mounts = volumeBindings
 
 	createdContainer, err := cm.Client.ContainerCreate(ctx, containerConfig, hostConfig, nil, nil, "")
 	if err != nil {

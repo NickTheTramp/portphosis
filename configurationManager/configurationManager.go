@@ -24,6 +24,10 @@ type Configuration struct {
 	IsRunning bool
 	Path      string
 	Ports     []int `yaml:"ports"`
+	Volumes   []struct {
+		Target string `yaml:"target"`
+		Source string `yaml:"source"`
+	} `yaml:"volumes"`
 }
 
 func (cm *ConfigurationManager) GetConfigurations() []Configuration {
